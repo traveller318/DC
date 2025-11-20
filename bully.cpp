@@ -1,7 +1,8 @@
 #include <iostream>
+#include <vector>
 using namespace std;
 
-int bullyAlgorithm(int nodes[], int iniator, int n) {
+int bullyAlgorithm(vector<int>& nodes, int iniator, int n) {
     int controller = iniator;
     for(int i=iniator; i<n; i++) {
         if(nodes[i] == 1) {
@@ -20,8 +21,7 @@ int bullyAlgorithm(int nodes[], int iniator, int n) {
 int main()
 {
     int n = 10;
-    int nodes[n];
-    for(int i=0; i<n; i++) nodes[i] = 1;
+    vector<int> nodes(n, 1);
     int coordinator = n-1;
     int initiator = n/2;
     

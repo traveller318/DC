@@ -1,11 +1,11 @@
 #include <iostream>
+#include <vector>
 using namespace std;
 
-int ringAlgorithm(int nodes[], int initiator, int n) {
+int ringAlgorithm(vector<int>& nodes, int initiator, int n) {
     int controller = initiator;
     
-    int list[n];
-    for(int i=0; i<n; i++) list[i] = 0;
+    vector<int> list(n, 0);
     list[initiator] = 1;
     
     do{
@@ -35,8 +35,7 @@ int ringAlgorithm(int nodes[], int initiator, int n) {
 int main()
 {
     int n = 10;
-    int nodes[n];
-    for(int i=0; i<n; i++) nodes[i] = 1;
+    vector<int> nodes(n, 1);
     int coordinator = n-1;
     int initiator = n/2;
     
