@@ -1,6 +1,5 @@
 #include <bits/stdc++.h>
-#include <thread>
-#include <chrono>
+#include <unistd.h>   // for sleep()
 using namespace std;
 
 class Replica {
@@ -21,17 +20,16 @@ public:
         return store[key];
     }
 
-    void syncWith(Replica &r)
-    {
-        for (auto [key,value] : r.store) {
-            this->store[key] = value;
+    void syncWith(Replica &r) {
+        for (auto &p : r.store) {
+            store[p.first] = p.second;
         }
     }
 
     void print() {
         cout << name << " STORE -> { ";
-        for (auto [key,value] : store)
-            cout << key << "=" << value << " ";
+        for (auto &p : store)
+            cout << p.first << "=" << p.second << " ";
         cout << "}" << endl;
     }
 };
@@ -39,7 +37,7 @@ public:
 int main() {
     cout << "Distributed Key-Value Store (Eventual Consistency)\n\n";
 
-    // REPLICA CREATION
+    // REPLICAS
     Replica r1("R1");
     Replica r2("R2");
     Replica r3("R3");
@@ -65,13 +63,13 @@ int main() {
     r2.print();
     r3.print();
 
-    // After delay → replicas sync
     cout << "\nPropagating updates (after delay)...\n";
 
+    // Sync after delay
     r2.syncWith(r1);
     r3.syncWith(r1);
 
-    this_thread::sleep_for(chrono::seconds(5));
+    sleep(5);  // 5-second delay (Linux sleep)
 
     cout << "\nAfter synchronization:\n";
     r1.print();
