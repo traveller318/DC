@@ -1,4 +1,9 @@
 from xmlrpc.server import SimpleXMLRPCServer
+from socketserver import ThreadingMixIn
+
+class ThreadingXMLRPCServer(ThreadingMixIn, SimpleXMLRPCServer):
+    pass
+ 
 
 # Remote arithmetic functions
 def add(a, b):
@@ -16,7 +21,7 @@ def div(a, b):
     return a / b
 
 # Create RPC server
-server = SimpleXMLRPCServer(("localhost", 5000))
+server = ThreadingXMLRPCServer(("localhost", 5000), allow_none=True)
 print("Arithmetic RPC Server running on port 5000...")
 
 # Register functions
