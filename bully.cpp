@@ -1,35 +1,52 @@
-#include <iostream>
-#include <vector>
+#include <bits/stdc++.h>
 using namespace std;
 
-int bullyAlgorithm(vector<int>& nodes, int iniator, int n) {
-    int controller = iniator;
-    for(int i=iniator; i<n; i++) {
-        if(nodes[i] == 1) {
-            cout<<"Message Received Node "<< i+1 <<"\n";
-            controller = i;
-        }
-        else {
-            cout<<"Node "<<i+1<<" is dead"<<"\n";
-        }
-    }
-    
-    cout<<"New Coordinator Is Node "<<controller+1<<"\n";
-    return controller;
-}
+class Node {
+public:
+    int nodes[10];
+    int coordinator;
 
-int main()
-{
-    int n = 10;
-    vector<int> nodes(n, 1);
-    int coordinator = n-1;
-    int initiator = n/2;
-    
-    while(coordinator > initiator) {
-        nodes[coordinator] = 0;
-        cout<<"Initator: "<<initiator+1<<" Dead Coordinator: "<<coordinator+1<<"\n";
-        coordinator = bullyAlgorithm(nodes, initiator, n);
+    Node() {
+        for (int i = 0; i < 10; i++)
+            nodes[i] = 1;
+        coordinator = 9;     
     }
     
+    void kill(int i) {
+        nodes[i] = 0;
+        cout<<"Killed node "<<i<<"\n";
+    }
+
+    void bullyAlgorithm(int initiator) {
+        int controller = initiator;
+        int previous = initiator;
+        for(int i=initiator+1; i<10; i++) {
+            if(nodes[i] == 1) {
+                controller = i;
+                cout<<"Message at node: "<<i<<" ACKed to node: "<<previous<<"\n";
+                previous = controller;
+            }
+            else cout<<"Dead node: "<<i<<"\n";
+        }
+        coordinator = controller;
+        cout<<"Elected Leader: "<<coordinator<<"\n";
+    }
+
+    void simulate() {
+        int initiator = 4;
+        kill(7);
+        while (coordinator > initiator) {
+            kill(coordinator);
+            cout << "Initiator: " << initiator 
+                 << " Dead Coordinator: " << coordinator << "\n";
+
+            bullyAlgorithm(initiator);
+        }
+    }
+};
+
+int main() {
+    Node n;      
+    n.simulate();
     return 0;
 }
